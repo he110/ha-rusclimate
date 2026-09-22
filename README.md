@@ -29,6 +29,8 @@ The first supported device is the **Ballu ONEAIR ASP-100 / Electrolux EASP-100**
   - **Cloud only** — for devices on another network.
 - The Hommyn app keeps working alongside Home Assistant.
 - Devices on your network are discovered automatically.
+- If a device has not been reachable over the local network for 30 minutes, a warning appears in
+  **Settings → Repairs** and clears itself once the local connection is back.
 
 ## Entities (ASP-100)
 
@@ -104,6 +106,11 @@ automation:
   flag for some devices until the device sends a fresh update; change anything on the device or use
   Auto.
 - Download diagnostics from the device page when reporting an issue.
+
+## Known limitations
+
+- The night-mode fan speed cannot be changed yet: writing it the way other projects describe
+  (`program_data/1`) is ignored by ASP-100 firmware 1.38.
 
 ## How it works
 

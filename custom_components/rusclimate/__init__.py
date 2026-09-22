@@ -11,6 +11,7 @@ from homeassistant.helpers import device_registry as dr
 from .api import params as p
 from .api.router import Breezer, ConnMode
 from .const import CONF_CONN_MODE, CONF_DEVICE_TYPE, CONF_MAC, CONF_TOKEN, DOMAIN
+from .health import LocalHealthMonitor
 from .runtime import RuntimeData, RusclimateConfigEntry, Shared
 
 PLATFORMS: list[Platform] = [
@@ -38,6 +39,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: RusclimateConfigEntry) -
     await breezer.start()
     entry.runtime_data = RuntimeData(breezer=breezer)
     entry.async_on_unload(breezer.add_listener(partial(_sync_firmware, hass, entry)))
+    entry.async_on_unload(LocalHealthMonitor(hass, entry, breezer).start())
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 

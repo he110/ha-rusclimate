@@ -118,6 +118,16 @@
       "name": "Breezer"
     }
   },
+  "issues": {
+    "local_unreachable_cloud": {
+      "title": "{name}: local network connection lost",
+      "description": "Home Assistant has not reached {name} over the local network for more than 30 minutes and is controlling it through the vendor cloud. It will stop working if the internet goes down.\n\nCheck that the device and Home Assistant are on the same network segment and that multicast (mDNS) is not filtered. The issue disappears by itself once the local connection is back."
+    },
+    "local_unreachable": {
+      "title": "{name} is not reachable",
+      "description": "Home Assistant has not reached {name} over the local network for more than 30 minutes, and no other connection is available.\n\nCheck that the device is powered and connected to Wi-Fi, and that it is on the same network segment as Home Assistant. The issue disappears by itself once the device is back."
+    }
+  },
   "exceptions": {
     "not_available": {
       "message": "The device is not reachable over any channel."
