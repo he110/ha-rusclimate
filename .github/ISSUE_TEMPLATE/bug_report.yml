@@ -1,0 +1,50 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please **never paste a share link or its token** — it gives full control
+        of the device. The diagnostics file below already has it removed.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, what happened instead.
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device model and module firmware
+      description: Shown on the device page, e.g. "Ballu ONEAIR ASP-100, 1.38".
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Connection mode
+      options: [Auto, Local only, Cloud only]
+  - type: input
+    id: ha
+    attributes:
+      label: Home Assistant version
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Integration version
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: Settings → Devices & services → Rusclimate (Hommyn) → ⋮ → Download diagnostics. Drag the file here.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Debug log
+      description: |
+        With `logger: logs: custom_components.rusclimate: debug` enabled. Check it for tokens before posting.
+      render: text

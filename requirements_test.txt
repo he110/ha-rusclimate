@@ -1,0 +1,3 @@
+pytest-homeassistant-custom-component==0.13.366
+pysyncleo==0.4.0
+aiomqtt==2.5.1

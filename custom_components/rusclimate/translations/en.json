@@ -1,0 +1,129 @@
+{
+  "config": {
+    "flow_title": "{mac}",
+    "step": {
+      "user": {
+        "title": "Add a Rusclimate device",
+        "description": "In the Hommyn app open the device settings, then Access control, Share, and press Share under the QR code to copy the link. The link works as a password: anyone who has it can control the device.",
+        "data": {
+          "share_link": "Share link",
+          "conn_mode": "Connection"
+        },
+        "data_description": {
+          "share_link": "The text copied from the Share screen of the Hommyn app",
+          "conn_mode": "Auto uses the local network and falls back to the vendor cloud. Local and Cloud use only that channel."
+        }
+      },
+      "reconfigure": {
+        "title": "Update the share link",
+        "description": "Paste a fresh share link for the same device, for example after it was re-added in the Hommyn app.",
+        "data": {
+          "share_link": "Share link"
+        }
+      }
+    },
+    "error": {
+      "invalid_link": "This is not a Hommyn device share link.",
+      "unsupported_device": "This device type is not supported yet.",
+      "wrong_device": "The link belongs to a different device."
+    },
+    "abort": {
+      "already_configured": "This device is already configured.",
+      "not_supported": "This device type is not supported yet.",
+      "reconfigure_successful": "The share link was updated.",
+      "wrong_device": "The link belongs to a different device."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Connection",
+        "data": {
+          "conn_mode": "Connection"
+        },
+        "data_description": {
+          "conn_mode": "Auto uses the local network and falls back to the vendor cloud. Local and Cloud use only that channel."
+        }
+      }
+    }
+  },
+  "selector": {
+    "conn_mode": {
+      "options": {
+        "auto": "Auto (local first, cloud as fallback)",
+        "local": "Local network only",
+        "cloud": "Cloud only"
+      }
+    }
+  },
+  "entity": {
+    "climate": {
+      "breezer": {
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "manual": "Manual",
+              "auto": "Auto (CO2)",
+              "night": "Night",
+              "turbo": "Turbo",
+              "ventilation": "Ventilation"
+            }
+          }
+        }
+      }
+    },
+    "select": {
+      "melody": {
+        "name": "Sound",
+        "state": {
+          "off": "Off",
+          "rain": "Rain",
+          "sea": "Sea",
+          "forest": "Forest",
+          "birds": "Birds",
+          "fireplace": "Fireplace"
+        }
+      }
+    },
+    "sensor": {
+      "supply_temperature": {
+        "name": "Supply air temperature"
+      },
+      "filter": {
+        "name": "Filter"
+      },
+      "turbo_end": {
+        "name": "Turbo ends"
+      },
+      "connection": {
+        "name": "Connection",
+        "state": {
+          "local": "Local",
+          "cloud": "Cloud",
+          "offline": "Offline"
+        }
+      }
+    },
+    "switch": {
+      "button_sound": {
+        "name": "Button sound"
+      },
+      "backlight_auto_off": {
+        "name": "Backlight auto-off"
+      }
+    }
+  },
+  "device": {
+    "breezer": {
+      "name": "Breezer"
+    }
+  },
+  "exceptions": {
+    "not_available": {
+      "message": "The device is not reachable over any channel."
+    },
+    "send_failed": {
+      "message": "Could not send the command: {error}"
+    }
+  }
+}
