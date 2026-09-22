@@ -109,8 +109,8 @@ automation:
 
 ## Known limitations
 
-- The night-mode fan speed cannot be changed yet: writing it the way other projects describe
-  (`program_data/1`) is ignored by ASP-100 firmware 1.38.
+- Night mode always runs at speed 1, as in the Hommyn app: the device has no separate night speed
+  setting (checked on ASP-100, module firmware 1.38). Setting any speed leaves night mode.
 
 ## How it works
 
