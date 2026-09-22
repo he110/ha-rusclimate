@@ -84,7 +84,9 @@ class RusclimateConfigFlow(ConfigFlow, domain=DOMAIN):
             if self._discovered_mac and link.mac != self._discovered_mac:
                 errors[CONF_SHARE_LINK] = "wrong_device"
             else:
-                await self.async_set_unique_id(link.mac)
+                # A manual add must not be blocked by the pending discovery of the same device;
+                # creating the entry aborts that discovery flow.
+                await self.async_set_unique_id(link.mac, raise_on_progress=False)
                 self._abort_if_unique_id_configured(updates=_entry_data(link))
                 return self.async_create_entry(
                     title=_title(link),

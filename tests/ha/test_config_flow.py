@@ -105,3 +105,15 @@ async def test_options_flow_changes_mode(hass, channels):
     await hass.async_block_till_done()
     assert entry.options == {"conn_mode": "cloud"}
     assert entry.runtime_data.breezer.mode.value == "cloud"
+
+
+async def test_manual_add_while_discovery_is_pending(hass):
+    discovery = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": config_entries.SOURCE_ZEROCONF}, data=_discovery()
+    )
+    assert discovery["type"] is FlowResultType.FORM
+    result = await hass.config_entries.flow.async_init(DOMAIN, context={"source": config_entries.SOURCE_USER})
+    with _no_setup():
+        result = await hass.config_entries.flow.async_configure(result["flow_id"], {"share_link": LINK})
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert not hass.config_entries.flow.async_progress_by_handler(DOMAIN)

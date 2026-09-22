@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1
+
+- Adding a device manually no longer fails with "already in progress" while the same device waits
+  in Discovered; the discovery is closed when the entry is created.
+
 ## 0.1.0
 
 First release.
