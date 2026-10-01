@@ -102,6 +102,9 @@
           "cloud": "Облако",
           "offline": "Нет связи"
         }
+      },
+      "prefilter": {
+        "name": "Предфильтр"
       }
     },
     "switch": {
@@ -110,6 +113,20 @@
       },
       "backlight_auto_off": {
         "name": "Автоотключение подсветки"
+      },
+      "ionizer": {
+        "name": "Ионизатор"
+      },
+      "uv_lamp": {
+        "name": "УФ-лампа"
+      },
+      "damper": {
+        "name": "Заслонка"
+      }
+    },
+    "binary_sensor": {
+      "damper_position": {
+        "name": "Положение заслонки"
       }
     }
   },

@@ -7,6 +7,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .api import params as p
+from .const import CONF_DEVICE_TYPE, PROFILES
 from .entity import RusclimateEntity
 from .runtime import RusclimateConfigEntry
 
@@ -18,7 +19,8 @@ MELODIES = ["off", "rain", "sea", "forest", "birds", "fireplace"]  # index = dev
 async def async_setup_entry(
     hass: HomeAssistant, entry: RusclimateConfigEntry, async_add_entities: AddConfigEntryEntitiesCallback
 ) -> None:
-    async_add_entities([MelodySelect(entry)])
+    if PROFILES[entry.data[CONF_DEVICE_TYPE]].melody:
+        async_add_entities([MelodySelect(entry)])
 
 
 class MelodySelect(RusclimateEntity, SelectEntity):

@@ -16,6 +16,7 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.restore_state import ExtraStoredData, RestoreEntity
 
 from .api import params as p
+from .const import CONF_DEVICE_TYPE, PROFILES
 from .entity import RusclimateEntity
 from .runtime import RusclimateConfigEntry
 
@@ -29,7 +30,6 @@ PRESETS: dict[str, p.Mode] = {
     "ventilation": p.Mode.VENTILATION,
 }
 PRESET_BY_MODE = {mode: name for name, mode in PRESETS.items()}
-FAN_MODES = [str(s) for s in range(p.SPEED_MIN, p.SPEED_MAX + 1)]
 
 
 async def async_setup_entry(
@@ -54,11 +54,12 @@ class BreezerClimate(RusclimateEntity, ClimateEntity, RestoreEntity):
     _attr_min_temp = p.TEMPERATURE_MIN
     _attr_max_temp = p.TEMPERATURE_MAX
     _attr_hvac_modes = [HVACMode.OFF, HVACMode.FAN_ONLY]  # noqa: RUF012
-    _attr_fan_modes = FAN_MODES
     _watch = frozenset({p.MODE, p.SPEED, p.TARGET_TEMPERATURE, p.CURRENT_TEMPERATURE, p.PROGRAM_DATA_0})
 
     def __init__(self, entry: RusclimateConfigEntry) -> None:
         super().__init__(entry, "climate")
+        self._speed_max = PROFILES[entry.data[CONF_DEVICE_TYPE]].speed_max
+        self._attr_fan_modes = [str(s) for s in range(p.SPEED_MIN, self._speed_max + 1)]
 
     async def async_added_to_hass(self) -> None:
         await super().async_added_to_hass()
@@ -107,9 +108,9 @@ class BreezerClimate(RusclimateEntity, ClimateEntity, RestoreEntity):
 
     @property
     def fan_mode(self) -> str | None:
-        # Turbo reports 8, ventilation and off report 0: these are not user-selectable speeds.
+        # Turbo reports speed_max + 1, ventilation and off report 0: not user-selectable speeds.
         speed = self.state_data.get(p.SPEED)
-        return str(speed) if speed is not None and p.SPEED_MIN <= speed <= p.SPEED_MAX else None
+        return str(speed) if speed is not None and p.SPEED_MIN <= speed <= self._speed_max else None
 
     @property
     def current_temperature(self) -> float | None:
@@ -136,6 +137,7 @@ class BreezerClimate(RusclimateEntity, ClimateEntity, RestoreEntity):
         await self._send(p.MODE, PRESETS[preset_mode])
 
     async def async_set_fan_mode(self, fan_mode: str) -> None:
+        # Setting a speed switches the device to manual (seen live on the ASP-200S in auto).
         await self._send(p.SPEED, int(fan_mode))
 
     async def async_set_temperature(self, **kwargs: Any) -> None:

@@ -12,8 +12,11 @@ Control Rusclimate devices managed by the **Hommyn** app (Ballu, Electrolux and 
 Rusclimate) directly from Home Assistant: over your **local network**, through the **vendor cloud**,
 or both with automatic fallback.
 
-The first supported device is the **Ballu ONEAIR ASP-100 / Electrolux EASP-100** breezer
-(Hommyn device type 69).
+Supported devices:
+
+- **Ballu ONEAIR ASP-100 / Electrolux EASP-100** breezer (Hommyn device type 69) — local and cloud.
+- **Ballu ONEAIR ASP-200S** breezer (Hommyn device type 59) — cloud only, see
+  [Entities (ASP-200S)](#entities-asp-200s).
 
 [Русская версия](README.ru.md)
 
@@ -46,6 +49,22 @@ The first supported device is the **Ballu ONEAIR ASP-100 / Electrolux EASP-100**
 | Problem | On when the device reports an error code |
 | Connection | Which channel carries the device now: local, cloud or offline (diagnostic) |
 | Signal strength | Wi-Fi RSSI (diagnostic, disabled by default) |
+
+## Entities (ASP-200S)
+
+The same climate, supply air temperature, CO₂, filter, turbo, button sound, backlight, problem,
+connection and signal entities as the ASP-100, with these differences:
+
+| Entity | What it does |
+|---|---|
+| Climate | Fan speed 1–8 (turbo runs at 9, which is not a selectable speed). Setting a speed in auto switches the device to manual. |
+| PM2.5 | Particulate matter, µg/m³ |
+| Pre-filter | Remaining pre-filter resource, % (the main filter is **Filter**) |
+| Ionizer, UV lamp | Air purification switches |
+| Damper | On = open (the device's own flag is the inverse); available **in manual mode only** — in the other modes the device drives the damper itself and ignores the command |
+| Damper position | Open / closed (recirculation), in **every** mode — including the ones where the device drives the damper |
+
+There is no Sound select: the ambient sounds are not verified on this model.
 
 ## Requirements
 
@@ -108,6 +127,11 @@ automation:
 - Download diagnostics from the device page when reporting an issue.
 
 ## Known limitations
+
+- **ASP-200S works through the cloud only.** The local codec is verified on the ASP-100; for device
+  type 59 the connection mode is always Cloud, whatever is chosen. Checked live on module firmware
+  1.21: speed, modes, ionizer and damper commands; the UV lamp command and the ventilation preset are
+  not verified yet.
 
 - Night mode always runs at speed 1, as in the Hommyn app: the device has no separate night speed
   setting (checked on ASP-100, module firmware 1.38). Setting any speed leaves night mode.

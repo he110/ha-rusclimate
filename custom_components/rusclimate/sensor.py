@@ -1,4 +1,4 @@
-"""Sensors: supply-air temperature, CO2, filter resource, turbo end, Wi-Fi signal, active channel."""
+"""Sensors: supply-air temperature, CO2, PM2.5, filter resource, turbo end, Wi-Fi signal, active channel."""
 
 from __future__ import annotations
 
@@ -17,6 +17,7 @@ from homeassistant.const import (
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     EntityCategory,
+    UnitOfDensity,
     UnitOfRatio,
     UnitOfTemperature,
 )
@@ -25,6 +26,7 @@ from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.util import dt as dt_util
 
 from .api import params as p
+from .const import CONF_DEVICE_TYPE, PROFILES
 from .entity import RusclimateEntity
 from .runtime import RusclimateConfigEntry
 
@@ -82,12 +84,34 @@ SENSORS: tuple[RusclimateSensorDescription, ...] = (
 )
 
 
+PURIFIER_SENSORS: tuple[RusclimateSensorDescription, ...] = (
+    RusclimateSensorDescription(
+        key="pm25",
+        device_class=SensorDeviceClass.PM25,
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=UnitOfDensity.MICROGRAMS_PER_CUBIC_METER,
+        watch=frozenset({p.PM25}),
+        value_fn=lambda s: s.get(p.PM25),
+    ),
+    RusclimateSensorDescription(
+        key="prefilter",
+        translation_key="prefilter",
+        state_class=SensorStateClass.MEASUREMENT,
+        native_unit_of_measurement=PERCENTAGE,
+        watch=frozenset({p.EXPENDABLES}),
+        value_fn=lambda s: p.filter_percent(s, 1),
+    ),
+)
+
+
 async def async_setup_entry(
     hass: HomeAssistant, entry: RusclimateConfigEntry, async_add_entities: AddConfigEntryEntitiesCallback
 ) -> None:
+    purifier = PROFILES[entry.data[CONF_DEVICE_TYPE]].purifier
     async_add_entities(
         [
             *(RusclimateSensor(entry, d) for d in SENSORS),
+            *(RusclimateSensor(entry, d) for d in (PURIFIER_SENSORS if purifier else ())),
             TurboEndSensor(entry),
             ConnectionSensor(entry),
         ]

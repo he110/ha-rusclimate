@@ -1,0 +1,91 @@
+{
+  "entity": {
+    "climate": {
+      "breezer": {
+        "default": "mdi:fan",
+        "state_attributes": {
+          "preset_mode": {
+            "default": "mdi:fan",
+            "state": {
+              "manual": "mdi:hand-back-right-outline",
+              "auto": "mdi:molecule-co2",
+              "night": "mdi:weather-night",
+              "turbo": "mdi:rocket-launch-outline",
+              "ventilation": "mdi:weather-windy"
+            }
+          },
+          "fan_mode": {
+            "default": "mdi:fan",
+            "state": {
+              "1": "mdi:numeric-1-circle-outline",
+              "2": "mdi:numeric-2-circle-outline",
+              "3": "mdi:numeric-3-circle-outline",
+              "4": "mdi:numeric-4-circle-outline",
+              "5": "mdi:numeric-5-circle-outline",
+              "6": "mdi:numeric-6-circle-outline",
+              "7": "mdi:numeric-7-circle-outline",
+              "8": "mdi:numeric-8-circle-outline"
+            }
+          }
+        }
+      }
+    },
+    "select": {
+      "melody": {
+        "default": "mdi:music-note"
+      }
+    },
+    "sensor": {
+      "supply_temperature": {
+        "default": "mdi:thermometer-chevron-up"
+      },
+      "filter": {
+        "default": "mdi:air-filter"
+      },
+      "prefilter": {
+        "default": "mdi:air-filter"
+      },
+      "turbo_end": {
+        "default": "mdi:timer-outline"
+      },
+      "connection": {
+        "default": "mdi:lan-connect",
+        "state": {
+          "cloud": "mdi:cloud-outline",
+          "offline": "mdi:lan-disconnect"
+        }
+      }
+    },
+    "switch": {
+      "button_sound": {
+        "default": "mdi:volume-high",
+        "state": {
+          "off": "mdi:volume-off"
+        }
+      },
+      "backlight_auto_off": {
+        "default": "mdi:brightness-auto"
+      },
+      "ionizer": {
+        "default": "mdi:shimmer"
+      },
+      "uv_lamp": {
+        "default": "mdi:lightbulb-fluorescent-tube-outline"
+      },
+      "damper": {
+        "default": "mdi:valve-closed",
+        "state": {
+          "on": "mdi:valve-open"
+        }
+      }
+    },
+    "binary_sensor": {
+      "damper_position": {
+        "default": "mdi:valve-closed",
+        "state": {
+          "on": "mdi:valve-open"
+        }
+      }
+    }
+  }
+}

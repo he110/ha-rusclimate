@@ -10,7 +10,7 @@ from homeassistant.helpers import device_registry as dr
 
 from .api import params as p
 from .api.router import Breezer, ConnMode
-from .const import CONF_CONN_MODE, CONF_DEVICE_TYPE, CONF_MAC, CONF_TOKEN, DOMAIN
+from .const import CONF_CONN_MODE, CONF_DEVICE_TYPE, CONF_MAC, CONF_TOKEN, DOMAIN, PROFILES
 from .health import LocalHealthMonitor
 from .runtime import RuntimeData, RusclimateConfigEntry, Shared
 
@@ -28,6 +28,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: RusclimateConfigEntry) -
     await shared.acquire()
     mac, token = entry.data[CONF_MAC], entry.data[CONF_TOKEN]
     mode = ConnMode(entry.options.get(CONF_CONN_MODE, ConnMode.AUTO))
+    if not PROFILES[entry.data[CONF_DEVICE_TYPE]].local:
+        mode = ConnMode.CLOUD
     breezer = Breezer(
         mode,
         local=shared.local_channel(mac, token) if mode is not ConnMode.CLOUD else None,

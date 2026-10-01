@@ -60,3 +60,31 @@ def test_flags_unknown_until_program_data_arrives():
     assert p.heater_installed({}) is None
     assert p.co2_sensor_installed({p.PROGRAM_DATA_0: b"\x01"}) is None
     assert p.filter_percent({p.EXPENDABLES: []}) is None
+
+
+# Retained snapshot from a live ASP-200S, device type 59, module firmware 1.21.
+LIVE_59 = {
+    "expendables": "[98,69]",
+    "sensor/pm2": "4",
+    "sensor/co2": "395",
+    "ionizer": "true",
+    "uv": "false",
+    "damper": "false",
+    "program_data/0": "0101",
+    "program_data/1": "00010001",
+    "speed": "9",
+    "mode": "4",
+}
+
+
+def test_decode_asp200_snapshot():
+    state = {k: p.decode_cloud(k, v) for k, v in LIVE_59.items()}
+    assert state[p.PM25] == 4
+    assert state[p.IONIZER] is True
+    assert state[p.UV_LAMP] is False
+    assert state[p.DAMPER] is False
+    assert p.filter_percent(state) == 98
+    assert p.filter_percent(state, 1) == 69
+    assert p.filter_percent({p.EXPENDABLES: [76]}, 1) is None  # ASP-100 has one filter
+    assert p.heater_installed(state) is True
+    assert p.co2_sensor_installed(state) is True

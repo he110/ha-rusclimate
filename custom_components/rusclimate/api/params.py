@@ -26,6 +26,12 @@ TURBO_TIME = "time"  # seconds left in turbo; ticks every second while turbo run
 PROGRAM_DATA_0 = "program_data/0"  # [heater installed, CO2 sensor installed]
 PROGRAM_DATA_1 = "program_data/1"  # [turn on, night speed, damper]
 ERROR_CODE = "error/code"
+# ASP-200S (type 59). The device reports these as "true"/"false" but must be sent "1"/"0":
+# control/damper "true" is ignored.
+PM25 = "sensor/pm2"
+IONIZER = "ionizer"
+UV_LAMP = "uv"
+DAMPER = "damper"  # accepted in manual mode only; the device drives it in the other modes
 RSSI = "diag/rssi"
 FIRMWARE = "firmware"
 
@@ -44,13 +50,23 @@ SPEED_MAX = 7
 TEMPERATURE_MIN = 5
 TEMPERATURE_MAX = 25
 
-_INT_KEYS = {MODE, SPEED, CO2, MELODY, TURBO_TIME, RSSI}
+_INT_KEYS = {MODE, SPEED, CO2, PM25, MELODY, TURBO_TIME, RSSI}
 _FLOAT_KEYS = {TARGET_TEMPERATURE, CURRENT_TEMPERATURE}
-_BOOL_KEYS = {BUTTON_SOUND, BACKLIGHT_AUTO_OFF}
+_BOOL_KEYS = {BUTTON_SOUND, BACKLIGHT_AUTO_OFF, IONIZER, UV_LAMP, DAMPER}
 _BYTES_KEYS = {PROGRAM_DATA_0, PROGRAM_DATA_1}
 
 # Keys we are allowed to write. Anything else is read-only.
-WRITABLE = {MODE, SPEED, TARGET_TEMPERATURE, MELODY, BUTTON_SOUND, BACKLIGHT_AUTO_OFF}
+WRITABLE = {
+    MODE,
+    SPEED,
+    TARGET_TEMPERATURE,
+    MELODY,
+    BUTTON_SOUND,
+    BACKLIGHT_AUTO_OFF,
+    IONIZER,
+    UV_LAMP,
+    DAMPER,
+}
 
 
 def decode_cloud(key: str, raw: str) -> Any:
@@ -97,6 +113,7 @@ def co2_sensor_installed(state: dict[str, Any]) -> bool | None:
     return program_flag(state, PROGRAM_DATA_0, 1)
 
 
-def filter_percent(state: dict[str, Any]) -> int | None:
+def filter_percent(state: dict[str, Any], index: int = 0) -> int | None:
+    """Resource left, %. Index 0 is the main filter; the ASP-200S reports the pre-filter at 1."""
     value = state.get(EXPENDABLES)
-    return value[0] if isinstance(value, list) and value else None
+    return value[index] if isinstance(value, list) and len(value) > index else None

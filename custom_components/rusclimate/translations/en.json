@@ -102,6 +102,9 @@
           "cloud": "Cloud",
           "offline": "Offline"
         }
+      },
+      "prefilter": {
+        "name": "Pre-filter"
       }
     },
     "switch": {
@@ -110,6 +113,20 @@
       },
       "backlight_auto_off": {
         "name": "Backlight auto-off"
+      },
+      "ionizer": {
+        "name": "Ionizer"
+      },
+      "uv_lamp": {
+        "name": "UV lamp"
+      },
+      "damper": {
+        "name": "Damper"
+      }
+    },
+    "binary_sensor": {
+      "damper_position": {
+        "name": "Damper position"
       }
     }
   },
